@@ -82,11 +82,10 @@ class AgentExecutor:
         # Build volume list - always mount agent.py
         volumes = [(self.agent_filepath, "/app/agent.py")]
         
-        if settings.local:
-            run_sandbox_path = Path(__file__).parent / "agent_sandbox" / "run_sandbox.py"
-            if run_sandbox_path.exists():
-                volumes.append((str(run_sandbox_path), "/app/run_sandbox.py"))
-                self.logger.info(f"[LOCAL] Mounting run_sandbox.py from {run_sandbox_path}")
+        run_sandbox_path = Path(__file__).parent / "agent_sandbox" / "run_sandbox.py"
+        if run_sandbox_path.exists():
+            volumes.append((str(run_sandbox_path), "/app/run_sandbox.py"))
+            self.logger.info(f"[LOCAL] Mounting run_sandbox.py from {run_sandbox_path}")
         
         container = docker.run(
             project_image_tag,
