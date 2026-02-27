@@ -1,4 +1,4 @@
-__build_number__ = 26
-__git_sha__ = "007d7b9"
-__build_date__ = "2026-02-24T19:05:38Z"
-__version__ = "26-007d7b9"
+__build_number__ = 27
+__git_sha__ = "3e16cc3"
+__build_date__ = "2026-02-27T17:26:43Z"
+__version__ = "27-3e16cc3"
