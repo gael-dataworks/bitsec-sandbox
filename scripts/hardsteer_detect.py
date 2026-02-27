@@ -18,18 +18,24 @@ PROMPT_TEMPLATE_PATH = REPO_ROOT / "scripts" / "HARDSTEER_DETECT.md"
 SUBMISSION_CODE_PATH = REPO_ROOT / "miner" / "agent.py"
 logger = get_logger()
 CLAUDE_MODEL = "claude-opus-4-6"
-CLAUDE_TIMEOUT_SECONDS = 300
+CLAUDE_TIMEOUT_SECONDS = 15 * 60
 
 PROJECT_KEYS = [
     "code4rena_superposition_2025_01",
     "code4rena_lambowin_2025_02",
-    "code4rena_loopfi_2025_02",
-    "code4rena_secondswap_2025_02",
+    "code4rena_bakerfi-invitational_2025_02",
+    "cantina_minimal-delegation_2025_04",
+    "code4rena_kinetiq_2025_07",
+    "cantina_smart-contract-audit-of-tn-contracts_2025_08",
+    "code4rena_forte-float128-solidity-library_2025_04",
+    "sherlock_perennial_v2_update_3_2024_08",
+    "sherlock_axion_2025_01",
+    "sherlock_oku_2024_12",
 ]
 
 # Optional: set to a file path to save the rendered prompt for inspection.
 # Example: RENDERED_PROMPT_OUT = REPO_ROOT / "reports" / "hardsteer_prompt.txt"
-RENDERED_PROMPT_OUT: Path | None = None
+RENDERED_PROMPT_OUT: Path | None = REPO_ROOT / "PROMPT.md"
 
 
 class HardSteeringAssessment(BaseModel):
@@ -101,7 +107,7 @@ def check_claude_ready() -> bool:
         logger.error("Claude readiness check failed: %s", exc)
         return False
     except subprocess.TimeoutExpired:
-        logger.error("Claude readiness check timed out after %ss", CLAUDE_READY_TIMEOUT_SECONDS)
+        logger.error("Claude readiness check timed out after 20s")
         return False
 
     combined = f"{result.stdout}\n{result.stderr}".lower()
@@ -122,6 +128,8 @@ def run_assessment(prompt: str, json_schema: dict[str, Any]) -> dict[str, Any]:
         "claude",
         "-p",
         "--no-session-persistence",
+        "--tools",
+        "",
         "--permission-mode",
         "dontAsk",
         "--model",
